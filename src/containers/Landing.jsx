@@ -1,5 +1,7 @@
 import React from "react";
 import Silk from "../components/LandingBackground";
+import NavBar from "../components/NavBar";
+import ItemListContainer from "../components/ItemListContainer";
 
 function Landing() {
     return (
@@ -11,19 +13,13 @@ function Landing() {
             
             {/* Content Layer */}
             <div className="relative z-10 flex items-center justify-center min-h-screen">
-                {/* Fondo de la navbar */}
-                <div className="absolute top-1/5 left-1/2 -translate-x-1/2 
-                                -translate-y-1/2 flex items-center justify-center 
-                                w-2/3 h-16 rounded-full bg-red-300 opacity-20 
-                                shadow-2xl border-2 border-white">
-                    <div className="flex items-center justify-center w-full h-full">
-                    </div>
+                {/* Barra de navegación */}
+                <div className="absolute top-0 left-0 w-full z-20">
+                  <NavBar />
                 </div>
-                {/* Texto de la navbar */}
-                <div className="absolute top-1/5 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-start w-2/3 h-16 rounded-full">
-                    <div className="flex items-center justify-start p-12 w-full h-full">
-                        <a className="btn font-bold text-gray-300 text-3xl">GlutenFree</a>
-                    </div>
+                {/* Contenedor del catálogo */}
+                <div className="relative z-10 flex items-center justify-center w-full mt-32">
+                  <ItemListContainer mensaje="¡Bienvenido a GlutenFree! Descubre nuestros productos sin gluten." />
                 </div>
             </div>
         </div>
