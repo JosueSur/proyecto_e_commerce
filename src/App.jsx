@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import Landing from "./containers/Landing";
-import Home from "./containers/Home";
+import Landing from "./pages/Landing";
+import Home from "./pages/Home";
 import "./index.css";
 import { UserProvider } from './contexts/UserContext';
 import { CartProvider } from './contexts/CartContext';
