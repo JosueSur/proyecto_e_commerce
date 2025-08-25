@@ -1,66 +1,61 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import ItemList from '../components/ItemList';
+import { getProductos, getProductosPorCategoria } from '../data/productos';
 
 const ItemListContainer = ({ mensaje }) => {
   const [inputName, setInputName] = useState('');
   const { handleSetName } = React.useContext(UserContext);
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [mostrarSoloItems, setMostrarSoloItems] = useState(window.location.hash === '#todos');
+  const { categoriaId } = useParams();
+  
+  // Mostrar solo items si hay parámetro de categoría o si estamos en la ruta de productos
+  const mostrarSoloItems = Boolean(categoriaId) || window.location.pathname === '/productos';
 
   useEffect(() => {
-    // Simula un fetch con retraso de 2 segundos
-    const fetchProductos = new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          {
-            id: 1,
-            nombre: 'Pan sin TACC',
-            descripcion: 'Pan apto para celíacos, fresco y delicioso.',
-            precio: 1200,
-            imagen: '/src/assets/pan-sin-gluten-rodajas.jpg',
-          },
-          {
-            id: 2,
-            nombre: 'Galletas de arroz',
-            descripcion: 'Galletas crocantes, libres de gluten.',
-            precio: 800,
-            imagen: '/src/assets/galleta-de-arroz.jpg',
-          },
-          {
-            id: 3,
-            nombre: 'Fideos de maíz',
-            descripcion: 'Fideos sin gluten, ideales para pastas.',
-            precio: 950,
-            imagen: '/src/assets/fideos-de-maiz.jpg',
-          },
-        ]);
-      }, 2000);
-    });
+    setLoading(true);
+    
+    const fetchProductos = categoriaId 
+      ? getProductosPorCategoria(categoriaId)
+      : getProductos();
+    
     fetchProductos.then((data) => {
       setProductos(data);
       setLoading(false);
+    }).catch((error) => {
+      console.error('Error cargando productos:', error);
+      setLoading(false);
     });
-  }, []);
-
-  useEffect(() => {
-    const onHashChange = () => {
-      setMostrarSoloItems(window.location.hash === '#todos');
-    };
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
-  }, []);
+  }, [categoriaId]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     handleSetName(inputName);
   };
 
+  const getTitulo = () => {
+    if (categoriaId) {
+      const categorias = {
+        panificados: 'Panificados',
+        snacks: 'Snacks',
+        pastas: 'Pastas',
+        postres: 'Postres'
+      };
+      return `Categoría: ${categorias[categoriaId] || categoriaId}`;
+    }
+    return mostrarSoloItems ? 'Todos los productos' : mensaje;
+  };
+
   return (
-    <section className="py-12 px-8 bg-gray-100/60 backdrop-blur shadow-md min-h-[300px] flex flex-col items-center justify-center text-[22px] text-gray-800 rounded-xl my-8 mx-auto max-w-3xl">
+    <section className="py-12 px-8 bg-gray-100/60 backdrop-blur shadow-md min-h-[300px] flex flex-col items-center justify-center text-[22px] text-gray-800 rounded-xl my-8 mx-auto max-w-6xl">
       <div className="flex flex-col items-center justify-center gap-4 w-full">
-        {mostrarSoloItems ? null : (
+        {mostrarSoloItems ? (
+          <div className="text-center mb-4">
+            <h2 className="text-2xl font-bold">{getTitulo()}</h2>
+          </div>
+        ) : (
           <>
             <div className="text-center">{mensaje}</div>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -84,8 +79,10 @@ const ItemListContainer = ({ mensaje }) => {
         <div className="w-full mt-8">
           {loading ? (
             <div className="text-center text-gray-500">Cargando productos...</div>
-          ) : (
+          ) : productos.length > 0 ? (
             <ItemList productos={productos} />
+          ) : (
+            <div className="text-center text-gray-500">No se encontraron productos en esta categoría.</div>
           )}
         </div>
       </div>
