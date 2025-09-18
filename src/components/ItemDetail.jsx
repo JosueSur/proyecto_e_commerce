@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { CartContext } from '../contexts/CartContext';
 import { Link } from 'react-router-dom';
 import ItemCount from './ItemCount';
 
+
 const ItemDetail = ({ producto }) => {
   const [cantidad, setCantidad] = useState(1);
+  const [agregado, setAgregado] = useState(false);
+  const { addToCart } = useContext(CartContext);
 
   const handleAgregarAlCarrito = (cantidad) => {
-    console.log(`Agregando ${cantidad} unidades de ${producto.nombre} al carrito`);
-    // Aquí integraremos con el CartContext posteriormente
+    addToCart({
+      ...producto,
+      quantity: cantidad,
+      price: producto.precio, // para compatibilidad con CartPage
+      image: producto.imagen, // para compatibilidad con CartWidget
+      title: producto.nombre, // para compatibilidad con CartWidget
+    });
+    setAgregado(true);
   };
 
   if (!producto) {
@@ -58,23 +68,25 @@ const ItemDetail = ({ producto }) => {
           </div>
 
           {/* Contador y botón agregar */}
-          <div className="space-y-4">
-            <ItemCount 
-              stock={producto.stock}
-              initial={1}
-              onAdd={handleAgregarAlCarrito}
-            />
-          </div>
-
-          {/* Botón volver */}
-          <div className="pt-4">
-            <Link 
-              to="/productos"
-              className="inline-block px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors no-underline"
-            >
-              ← Volver al catálogo
-            </Link>
-          </div>
+          {!agregado ? (
+            <div className="space-y-4">
+              <ItemCount 
+                stock={producto.stock}
+                initial={1}
+                onAdd={handleAgregarAlCarrito}
+              />
+            </div>
+          ) : (
+            <div className="space-y-4 text-center">
+              <div className="text-green-700 font-semibold text-lg">¡Producto agregado al carrito!</div>
+              <Link 
+                to="/productos"
+                className="inline-block px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors no-underline"
+              >
+                ← Volver al catálogo
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,8 +1,10 @@
 import React from 'react';
 import { CartContext } from '../contexts/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const CartWidget = () => {
-  const { cartItems, isCartOpen, setIsCartOpen, totalItems } = React.useContext(CartContext);
+  const { cartItems, isCartOpen, setIsCartOpen, totalItems, totalAmount, removeFromCart, increaseQuantity, decreaseQuantity } = React.useContext(CartContext);
+  const navigate = useNavigate();
 
   const handleCartClick = () => {
     setIsCartOpen(!isCartOpen);
@@ -76,7 +78,10 @@ const CartWidget = () => {
                   <span className="font-bold">${totalAmount.toFixed(2)}</span>
                 </div>
                 <button 
-                  onClick={() => setIsCartOpen(false)}
+                  onClick={() => {
+                    setIsCartOpen(false);
+                    navigate('/carrito');
+                  }}
                   className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-4"
                 >
                   Ver carrito completo

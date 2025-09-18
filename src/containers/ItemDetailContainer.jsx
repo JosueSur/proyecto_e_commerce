@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ItemDetail from '../components/ItemDetail';
-import { getProductoPorId } from '../data/productos';
+import { getProductoPorIdFirestore } from '../firebase';
 
 const ItemDetailContainer = () => {
   const [producto, setProducto] = useState(null);
@@ -13,7 +13,7 @@ const ItemDetailContainer = () => {
     setLoading(true);
     setError(null);
 
-    getProductoPorId(id)
+    getProductoPorIdFirestore(id)
       .then((data) => {
         setProducto(data);
         setLoading(false);

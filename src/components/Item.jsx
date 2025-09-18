@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { CartContext } from '../contexts/CartContext';
+import ItemCount from './ItemCount';
 
 const Item = ({ producto }) => {
+  const { addToCart } = useContext(CartContext);
+  const [showCount, setShowCount] = useState(false);
+  const [agregado, setAgregado] = useState(false);
+
+  const handleAdd = (cantidad) => {
+    addToCart({
+      ...producto,
+      quantity: cantidad,
+      price: producto.precio,
+      image: producto.imagen,
+      title: producto.nombre,
+    });
+    setAgregado(true);
+    setShowCount(false);
+    setTimeout(() => setAgregado(false), 1500);
+  };
+
   return (
     <div className="border rounded shadow p-4 flex flex-col items-center transition-transform hover:scale-105">
       <img src={producto.imagen} alt={producto.nombre} className="w-32 h-32 object-cover mb-2 rounded" />
@@ -15,9 +34,22 @@ const Item = ({ producto }) => {
         >
           Ver detalle
         </Link>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
-          Agregar al carrito
-        </button>
+        {showCount ? (
+          <ItemCount 
+            stock={producto.stock}
+            initial={1}
+            onAdd={handleAdd}
+          />
+        ) : agregado ? (
+          <div className="text-green-700 font-semibold text-center">¡Agregado!</div>
+        ) : (
+          <button 
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            onClick={() => setShowCount(true)}
+          >
+            Agregar al carrito
+          </button>
+        )}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import ItemList from '../components/ItemList';
-import { getProductos, getProductosPorCategoria } from '../data/productos';
+import { getProductosFirestore, getProductosPorCategoriaFirestore } from '../firebase';
 
 const ItemListContainer = ({ mensaje }) => {
   const [inputName, setInputName] = useState('');
@@ -17,17 +17,22 @@ const ItemListContainer = ({ mensaje }) => {
   useEffect(() => {
     setLoading(true);
     
-    const fetchProductos = categoriaId 
-      ? getProductosPorCategoria(categoriaId)
-      : getProductos();
-    
-    fetchProductos.then((data) => {
-      setProductos(data);
-      setLoading(false);
-    }).catch((error) => {
-      console.error('Error cargando productos:', error);
-      setLoading(false);
-    });
+    const fetchProductos = async () => {
+      try {
+        let data;
+        if (categoriaId) {
+          data = await getProductosPorCategoriaFirestore(categoriaId);
+        } else {
+          data = await getProductosFirestore();
+        }
+        setProductos(data);
+      } catch (error) {
+        console.error('Error cargando productos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProductos();
   }, [categoriaId]);
 
   const handleSubmit = (e) => {

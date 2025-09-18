@@ -1,8 +1,10 @@
+  // ...existing code...
 import React, { createContext, useState } from 'react';
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  const clearCart = () => setCartItems([]);
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -10,11 +12,11 @@ export const CartProvider = ({ children }) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(i => i.id === item.id);
       if (existingItem) {
-        return prevItems.map(i => 
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+        return prevItems.map(i =>
+          i.id === item.id ? { ...i, quantity: i.quantity + (item.quantity || 1) } : i
         );
       }
-      return [...prevItems, { ...item, quantity: 1 }];
+      return [...prevItems, { ...item, quantity: item.quantity || 1 }];
     });
   };
 
@@ -52,6 +54,7 @@ export const CartProvider = ({ children }) => {
       removeFromCart,
       increaseQuantity,
       decreaseQuantity,
+      clearCart,
       totalItems,
       totalAmount
     }}>

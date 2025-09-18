@@ -1,12 +1,46 @@
-# React + Vite
+# Proyecto E-Commerce GlutenFree
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
+E-commerce desarrollado en React + Vite para la venta de productos sin TACC (gluten free). Utiliza Firebase Firestore como base de datos para almacenar productos y registrar órdenes de compra.
 
-Currently, two official plugins are available:
+## Funcionalidades principales
+- Listado dinámico de productos y detalle individual, obtenidos desde Firestore.
+- Filtrado por categorías.
+- Carrito de compras global con Context API.
+- Suma, resta y eliminación de productos en el carrito.
+- Checkout con formulario de usuario y registro de orden en Firestore.
+- Descuento automático de stock al confirmar la compra.
+- Renderizado condicional de loaders y mensajes (carrito vacío, sin stock, etc).
+- Visualización del ID de la orden generada tras la compra.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Estructura de carpetas
+- `/src/components`: Componentes de presentación (Item, ItemList, ItemDetail, ItemCount, CartWidget, NavBar, etc).
+- `/src/containers`: Componentes contenedores con lógica de datos (ItemListContainer, ItemDetailContainer).
+- `/src/contexts`: Contextos globales (CartContext, UserContext).
+- `/src/pages`: Vistas principales (Home, Landing, Layout, NotFound, CartPage, CheckoutPage).
+- `/src/data`: Mock de productos (solo para carga inicial).
+- `/src/firebase.js`: Configuración y funciones de Firestore.
 
-## Expanding the ESLint configuration
+## Tecnologías utilizadas
+- React 19
+- Vite
+- Firebase (Firestore)
+- TailwindCSS
+- React Router DOM
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Cómo ejecutar
+1. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+2. Iniciar el proyecto:
+   ```bash
+   npm run dev
+   ```
+
+## Notas
+- Para cargar productos iniciales a Firestore, usar la función `cargarProductos()` de `firebase.js` solo una vez.
+- El proyecto está preparado para ser extendido con autenticación, panel de administración, etc.
+
+---
+Desarrollado por JosueSur, 2025.

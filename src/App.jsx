@@ -5,11 +5,20 @@ import Home from "./pages/Home";
 import ItemListContainer from "./containers/ItemListContainer";
 import ItemDetailContainer from "./containers/ItemDetailContainer";
 import NotFound from "./pages/NotFound";
+import CartPage from "./pages/CartPage";
+import CheckoutPage from "./pages/CheckoutPage";
 import "./index.css";
 import { UserProvider } from './contexts/UserContext';
 import { CartProvider } from './contexts/CartContext';
+import { useEffect } from "react";
+import { getItems } from "./firebase";
+
+
 
 function App() {
+  useEffect(() => {
+  getItems();
+}, []);
   return (
     <UserProvider>
       <CartProvider>
@@ -33,6 +42,8 @@ function App() {
                   <ItemDetailContainer />
                 </div>
               } />
+              <Route path="carrito" element={<CartPage />} />
+              <Route path="checkout" element={<CheckoutPage />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

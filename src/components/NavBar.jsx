@@ -17,7 +17,8 @@ const NavBar = () => {
         </Link>
       </div>
       <div className="flex items-center gap-2">
-        <Link to="/" className="mx-3 text-gray-900 no-underline hover:underline">Inicio</Link>
+  <Link to="/" className="mx-3 text-gray-900 no-underline hover:underline">Inicio</Link>
+  <Link to="/carrito" className="mx-3 text-gray-900 no-underline hover:underline">Carrito</Link>
         <div className="relative group">
           <button className="mx-3 text-gray-900 no-underline hover:underline focus:outline-none flex items-center gap-1">
             Productos
